@@ -1,6 +1,6 @@
 # Adversarial Music Genre Classification
 
-This project implements a baseline **Convolutional Neural Network (CNN)** for music genre classification and evaluates its robustness against a **Projected Gradient Descent (PGD)** adversarial attack.
+This project implements a baseline **Convolutional Neural Network (CNN)** for music genre classification and evaluates its robustness against adversarial attacks.
 
 ***
 
@@ -10,7 +10,7 @@ The code is provided as a **Jupyter Notebook (`AI3_Project.ipynb`)** and is desi
 
 ### Prerequisites
 * A Google account to use **Google Colab**.
-* The **GTZAN Dataset** is required. The notebook uses the `kagglehub` library to automatically download the dataset from Kaggle. Ensure your environment has the necessary permissions/setup for Kaggle access if running outside a standard Kaggle/Colab setup.
+* The **GTZAN Dataset** is required. The notebook uses the `kagglehub` library to automatically download the dataset from Kaggle.
 
 ### Project Steps
 1.  **Mount Google Drive** and set up the project folder structure.
@@ -23,15 +23,15 @@ The code is provided as a **Jupyter Notebook (`AI3_Project.ipynb`)** and is desi
 ## Algorithms and Methods Used
 
 ### 1. Classification Model
-* **Architecture**: A simple **Convolutional Neural Network (CNN)** (`AudioCNN`) is used, consisting of multiple convolutional, pooling, and batch normalization layers, followed by a fully connected classifier.
+* **Architecture**: A simple **Convolutional Neural Network (CNN)** (`AudioCNN`) used for 10-genre classification.
 * **Feature Extraction**: The model operates on **raw audio signals**, converting them internally into a **Mel Spectrogram** representation.
 
-### 2. Adversarial Attack
-* **Method**: The **Projected Gradient Descent (PGD) attack with L2 norm constraint** (`pgd_attack_l2`) is used to generate powerful adversarial examples by iteratively moving in the direction of the loss gradient.
-* **Parameters**: The attack utilized an $\mathbf{\epsilon}$ (maximum perturbation distance) of **2.0** and **20 steps** with an $\mathbf{\alpha}$ (step size) of **0.2**.
+### 2. Adversarial Attacks
+* **Projected Gradient Descent (PGD) Attack**: The primary iterative, gradient-based attack used in the notebook. It generates adversarial examples by taking small steps in the direction of the loss gradient, but stays within a maximum allowed perturbation ($\epsilon$) using an **L2 norm constraint**.
+* **Carlini & Wagner (C&W) Attack**: A stronger, optimization-based attack often used as a benchmark. It is designed to find the **minimum possible perturbation** ($\delta$) required to cause a misclassification by solving a formal optimization problem. This makes it highly effective against many defenses.
+
+### 3. Defense Mechanisms
+* **Adversarial Training**: A powerful defense mechanism where the model is periodically or continuously retrained using a mixture of **clean data and generated adversarial examples**. This explicitly teaches the model to classify perturbed inputs correctly, increasing its resilience.
+* **Lipschitz Regularization**: A defense strategy that improves robustness by **constraining the rate of change** of the model's output with respect to its input. This is done during training by minimizing a regularization term that limits the model's **Lipschitz constant** (or the norm of the input gradient), effectively "smoothing" the decision boundary and reducing the model's sensitivity to small perturbations.
 
 ***
-
-## Additional Notes
-
-* **Dataset**: The project uses the **GTZAN dataset** to classify audio clips into **10 music genres**.
