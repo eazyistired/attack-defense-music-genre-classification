@@ -1,5 +1,3 @@
-The updated `README` now includes a new section, "Evaluation Methods," which details how the model's robustness was assessed using the clean accuracy and the adversarial accuracy from the PGD attack, and specifies the attacks and defenses discussed.
-
 ***
 
 # Adversarial Music Genre Classification
@@ -77,3 +75,4 @@ A comparison table is generated at the end of the script to summarize the perfor
 | **C&W ($\ell_2$) Accuracy** | (Measured) | (Measured) | (Measured) |
 
 ***
+
