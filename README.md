@@ -1,3 +1,7 @@
+The updated `README` now includes a new section, "Evaluation Methods," which details how the model's robustness was assessed using the clean accuracy and the adversarial accuracy from the PGD attack, and specifies the attacks and defenses discussed.
+
+***
+
 # Adversarial Music Genre Classification
 
 This project implements a baseline **Convolutional Neural Network (CNN)** for music genre classification and evaluates its robustness against adversarial attacks.
@@ -16,22 +20,60 @@ The code is provided as a **Jupyter Notebook (`AI3_Project.ipynb`)** and is desi
 1.  **Mount Google Drive** and set up the project folder structure.
 2.  **Download and Prepare Data**: The notebook automatically downloads the **GTZAN dataset** and splits it into training, validation, and test sets (70%/15%/15% split).
 3.  **Model Training**: The **`AudioCNN`** model is defined and trained using the prepared dataset.
-4.  **Evaluation**: The model is evaluated for its **clean accuracy** and then its **adversarial accuracy** using the PGD attack.
+4.  **Evaluation**: The model is evaluated for its clean accuracy and then its adversarial accuracy using the PGD attack.
 
 ***
 
 ## Algorithms and Methods Used
 
 ### 1. Classification Model
-* **Architecture**: A simple **Convolutional Neural Network (CNN)** (`AudioCNN`) used for 10-genre classification.
-* **Feature Extraction**: The model operates on **raw audio signals**, converting them internally into a **Mel Spectrogram** representation.
+* **Architecture**: A simple **Convolutional Neural Network (CNN)** (`AudioCNN`) is used, based on convolutional, pooling, and batch normalization layers, followed by a fully connected classifier.
+* **Feature Extraction**: The model operates on **raw audio signals** and uses a differentiable layer to convert them into a **Mel Spectrogram** representation during the forward pass.
 
 ### 2. Adversarial Attacks
-* **Projected Gradient Descent (PGD) Attack**: The primary iterative, gradient-based attack used in the notebook. It generates adversarial examples by taking small steps in the direction of the loss gradient, but stays within a maximum allowed perturbation ($\epsilon$) using an **L2 norm constraint**.
-* **Carlini & Wagner (C&W) Attack**: A stronger, optimization-based attack often used as a benchmark. It is designed to find the **minimum possible perturbation** ($\delta$) required to cause a misclassification by solving a formal optimization problem. This makes it highly effective against many defenses.
+* **Projected Gradient Descent (PGD) Attack ($\ell_2$)**: An iterative, gradient-based attack used for both testing and defense training. It generates adversarial examples by iteratively moving in the direction of the loss gradient, projecting the perturbation back onto an **$\ell_2$ sphere** (Euclidean distance) to ensure the noise remains bounded.
+    * *Parameters*: **$\epsilon = 2.0$**, **$\alpha = 0.2$** (step size), and **$20$ steps**.
+* **Carlini & Wagner (C&W) Attack ($\ell_2$)**: A strong, optimization-based attack. It seeks to find the **minimum possible perturbation** required to cause a misclassification by minimizing a weighted combination of the perturbation magnitude (L2 norm) and a confidence term for the misclassification.
 
 ### 3. Defense Mechanisms
-* **Adversarial Training**: A powerful defense mechanism where the model is periodically or continuously retrained using a mixture of **clean data and generated adversarial examples**. This explicitly teaches the model to classify perturbed inputs correctly, increasing its resilience.
-* **Lipschitz Regularization**: A defense strategy that improves robustness by **constraining the rate of change** of the model's output with respect to its input. This is done during training by minimizing a regularization term that limits the model's **Lipschitz constant** (or the norm of the input gradient), effectively "smoothing" the decision boundary and reducing the model's sensitivity to small perturbations.
+
+The project explores two methods to increase the robustness of the baseline CNN model:
+
+1.  **Adversarial Training (AT)**:
+    * **Method**: The model is trained on a combined dataset of **clean inputs and adversarial inputs**. The adversarial samples are generated *on-the-fly* during each training epoch using the **PGD $\ell_2$ attack**.
+    * **Goal**: This process explicitly forces the model to correctly classify perturbed inputs, resulting in a **smoother decision boundary** and improved generalized robustness.
+
+2.  **Spectral Normalization (SN)**:
+    * **Method**: This technique is used to regularize the network's weights during the training process. After each optimizer step, the weights of the convolutional and linear layers are divided by their **spectral norm** (largest singular value).
+    * **Goal**: Bounding the spectral norm of the weight matrices directly controls the **Lipschitz constant** of the individual layers, which in turn limits the overall model's sensitivity to small changes in the input, thereby enhancing robustness.
+
+***
+
+## Evaluation Methods
+
+The robustness of three different models is evaluated against two powerful adversarial attacks:
+
+### 1. Models Evaluated
+The evaluation compares three models, all based on the `AudioCNN` architecture:
+1.  **Baseline Model**: Trained only on clean data.
+2.  **Adv. Trained Model**: Trained using the Adversarial Training defense.
+3.  **SN Trained Model**: Trained using the Spectral Normalization defense.
+
+### 2. Metrics and Testing Procedure
+Each model is evaluated using the following three metrics on the test set:
+
+* **Clean Accuracy**: The standard test accuracy on unperturbed audio clips.
+* **PGD ($\ell_2$) Attack Accuracy**: The accuracy of the model when tested against adversarial examples generated by the **PGD attack** ($\epsilon=2.0$, $\alpha=0.2$, steps=20).
+* **C&W ($\ell_2$) Attack Accuracy**: The accuracy of the model when tested against adversarial examples generated by the **C&W attack** ($c=10.0$, confidence=0.0, steps=1000).
+
+### 3. Final Robustness Comparison
+
+A comparison table is generated at the end of the script to summarize the performance of all models against both clean and adversarial inputs:
+
+| | **Baseline Model** | **Adv. Trained Model** | **SN Trained Model** |
+|:--------------------------|:----------------:|:------------------------:|:--------------------:|
+| **Clean Accuracy** | (Measured) | (Measured) | (Measured) |
+| **PGD ($\ell_2$) Accuracy** | (Measured) | (Measured) | (Measured) |
+| **C&W ($\ell_2$) Accuracy** | (Measured) | (Measured) | (Measured) |
 
 ***
