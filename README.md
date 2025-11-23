@@ -66,17 +66,12 @@ Each model is evaluated using the following three metrics on the test set:
 
 ### 3. Final Robustness Comparison
 
-A comparison table is generated at the end of the script to summarize the performance of all models against both clean and adversarial inputs:
-
-| | **Baseline Model** | **Adv. Trained Model** | **SN Trained Model** |
-|:--------------------------|:----------------:|:------------------------:|:--------------------:|
-| **Clean Accuracy** | (Measured) | (Measured) | (Measured) |
-| **PGD ($\ell_2$) Accuracy** | (Measured) | (Measured) | (Measured) |
-| **C&W ($\ell_2$) Accuracy** | (Measured) | (Measured) | (Measured) |
+A comparison table is generated at the end of the script to summarize the performance of all models against both clean and adversarial inputs.
 
 ***
 
 Google drive location for dataset and trained model weights is [here](https://drive.google.com/drive/folders/1tOY1ecOTMMcETZfmNkZ885nd4RYyslbm?usp=sharing)
 
 ***
+
 
