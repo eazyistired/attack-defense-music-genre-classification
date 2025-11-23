@@ -8,7 +8,7 @@ This project implements a baseline **Convolutional Neural Network (CNN)** for mu
 
 ## Setup and Running the Code
 
-The code is provided as a **Jupyter Notebook (`AI3_Project.ipynb`)** and is designed to run in a **Google Colab** environment, utilizing a **GPU (CUDA)** for training.
+The code is provided as a **Jupyter Notebook (`attack-defense-music-genre-class.ipynb`)** and is designed to run in a **Google Colab** environment, utilizing a **GPU (CUDA)** for training.
 
 ### Prerequisites
 * A Google account to use **Google Colab**.
@@ -73,6 +73,10 @@ A comparison table is generated at the end of the script to summarize the perfor
 | **Clean Accuracy** | (Measured) | (Measured) | (Measured) |
 | **PGD ($\ell_2$) Accuracy** | (Measured) | (Measured) | (Measured) |
 | **C&W ($\ell_2$) Accuracy** | (Measured) | (Measured) | (Measured) |
+
+***
+
+Google drive location for dataset and trained model weights is [here](https://drive.google.com/drive/folders/1tOY1ecOTMMcETZfmNkZ885nd4RYyslbm?usp=sharing)
 
 ***
 
